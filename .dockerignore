@@ -1,0 +1,5 @@
+# Exclude everything
+*
+
+# Include the minimum for building the container image
+# (empty)

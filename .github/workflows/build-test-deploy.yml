@@ -23,14 +23,26 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # linux/arm64 is disabled for now pending native runners; building in
+        # arm64 is disabled for now pending native runners; building in
         # qemu-aarch64 is too slow and costly.
         # See <https://github.com/actions/virtual-environments/issues/2187>
-        host: [linux/amd64] # linux/arm64
+        host: [amd64] # arm64
         target: [x86_64, aarch64]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+      - name: Available platforms
+        run: echo ${{ steps.qemu.outputs.platforms }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          # Bump buildkit version because we need PR 2433 to fix a bug
+          # in Github Actions Cache support.
+          # See <https://github.com/moby/buildkit/pull/2433>
+          driver-opts: image=moby/buildkit:v0.9.3
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
@@ -40,7 +52,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          platforms: ${{ matrix.platform }}
+          platforms: linux/${{ matrix.platform }}
           build-args: TARGET=${{ matrix.target }}
           tags: ghcr.io/${{ github.repository }}:${{ env.RUST_VERSION }}-${{ matrix.target }}
           push: true
@@ -48,4 +60,4 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Test image
         run:
-          docker run --pull always --platform ${{ matrix.platform }} --rm ghcr.io/${{ github.repository }}:${{ env.RUST_VERSION }}-${{ matrix.target }} rustc --version
+          docker run --pull always --platform linux/${{ matrix.platform }} --rm ghcr.io/${{ github.repository }}:${{ env.RUST_VERSION }}-${{ matrix.target }} rustc --version

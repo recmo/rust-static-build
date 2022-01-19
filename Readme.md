@@ -12,6 +12,7 @@ Includes
 * [musl](https://musl.libc.org/) and a musl-gcc compiler for C, C++ dependencies,
 * [zlib](https://zlib.net/), and
 * [openssl](https://www.openssl.org/).
+* [libpq](https://www.postgresql.org/docs/current/libpq.html) .
 
 It is similar to `https://github.com/emk/rust-musl-builder` and `https://github.com/rust-embedded/cross` but also supports building with arm64 as host (i.e. Apple Silicon) and has OpenSSL and libpq included.
 
@@ -19,6 +20,6 @@ It is similar to `https://github.com/emk/rust-musl-builder` and `https://github.
 
 
 ```
-docker build --build-arg TARGET=aarch64 --tag rust-static-build:arm64 .
-docker build --build-arg TARGET=x86_64 --tag rust-static-build:amd64 .
+docker build --build-arg TARGET=aarch64 --tag ghcr.io/recmo/rust-static-build:1.58-aarch64 .
+docker build --build-arg TARGET=x86_64 --tag ghcr.io/recmo/rust-static-build:1.58-x86_64 .
 ```

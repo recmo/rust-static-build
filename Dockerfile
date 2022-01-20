@@ -48,6 +48,11 @@ RUN curl -fL "https://ftp.postgresql.org/pub/source/v$POSTGRESql_VERSION/postgre
     cd ../../bin/pg_config && make && make install && \
     rm -r "/src/postgresql-$POSTGRESql_VERSION"
 
+# Install clang beacuse proc-macros require it on x86_64 hosts
+RUN apt-get update &&\
+    apt-get install -y clang &&\
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Set rust target
 ENV CARGO_BUILD_TARGET=$TARGET-unknown-linux-musl
 ENV CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=/usr/local/musl/bin/x86_64-linux-musl-gcc

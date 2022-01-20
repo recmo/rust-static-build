@@ -54,7 +54,7 @@ jobs:
         with:
           platforms: linux/${{ matrix.host }}
           build-args: TARGET=${{ matrix.target }}
-          tags: ghcr.io/${{ github.repository }}:${{ env.RUST_VERSION }}-${{ matrix.target }}-$${ matrix.host }}
+          tags: ghcr.io/${{ github.repository }}:${{ env.RUST_VERSION }}-${{ matrix.target }}-${ matrix.host }}
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max

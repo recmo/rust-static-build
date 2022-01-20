@@ -1,13 +1,9 @@
 FROM rust:1.58
 WORKDIR /src
 
-ARG TARGET=x86_64
-
-RUN echo "Building on " $(uname -m) " for " $TARGET &&\
-    apt-get update &&\
-    apt-get install -y libssl-dev texinfo libcap2-bin &&\
-    apt-get clean && rm -rf /var/lib/apt/lists/* &&\
-    rustup target add $TARGET-unknown-linux-musl
+# Target architecture, one of x864_64 or aarch64
+ARG TARGET
+LABEL org.opencontainers.image.description Rust builder for static $TARGET-linux-musl executables.
 
 # Build {x86_64,aarch64}-linux-musl toolchain
 # This is required to build zlib, openssl and other C dependencies
@@ -51,3 +47,9 @@ RUN curl -fL "https://ftp.postgresql.org/pub/source/v$POSTGRESql_VERSION/postgre
     cd src/interfaces/libpq && make all-static-lib && make install-lib-static && \
     cd ../../bin/pg_config && make && make install && \
     rm -r "/src/postgresql-$POSTGRESql_VERSION"
+
+# Set rust target
+ENV CARGO_BUILD_TARGET=$TARGET-unknown-linux-musl
+ENV CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=/usr/local/musl/bin/x86_64-linux-musl-gcc
+ENV CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=/usr/local/musl/bin/aarch64-linux-musl-gcc
+RUN rustup target add $CARGO_BUILD_TARGET

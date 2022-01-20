@@ -5,7 +5,7 @@
 
 Rust build image to create statically compiled binaries.
 
-Supports both `linux/amd64` and `linux/arm64` platforms.
+It supports cross compiling with both `linux/amd64` and `linux/arm64` as host platforms and `x86_64` and `aarch64` as target architectures.
 
 Includes
 
@@ -14,7 +14,14 @@ Includes
 * [openssl](https://www.openssl.org/).
 * [libpq](https://www.postgresql.org/docs/current/libpq.html) .
 
-It is similar to `https://github.com/emk/rust-musl-builder` and `https://github.com/rust-embedded/cross` but also supports building with arm64 as host (i.e. Apple Silicon) and has OpenSSL and libpq included.
+It is similar to `https://github.com/emk/rust-musl-builder` and `https://github.com/rust-embedded/cross` but also supports building with `linux/arm64` as host (i.e. docker on Apple Silicon) and has OpenSSL and libpq included.
+
+## Using
+
+```
+docker run --rm -v "$(pwd)":/src ghcr.io/recmo/rust-static-build:1.58-x86_64 cargo build --release
+docker run --rm -v "$(pwd)":/src ghcr.io/recmo/rust-static-build:1.58-aarch64 cargo build --release
+```
 
 ## Build locally
 

@@ -30,3 +30,23 @@ docker run --rm -v "$(pwd)":/src ghcr.io/recmo/rust-static-build:1.58-aarch64 ca
 docker build --build-arg TARGET=aarch64 --tag ghcr.io/recmo/rust-static-build:1.58-aarch64 .
 docker build --build-arg TARGET=x86_64 --tag ghcr.io/recmo/rust-static-build:1.58-x86_64 .
 ```
+
+
+## Developer notes
+
+Update manifest
+
+```
+docker manifest create \
+    ghcr.io/recmo/rust-static-build:1.58-aarch64 \
+    --amend ghcr.io/recmo/rust-static-build:1.58-aarch64-amd64 \
+    --amend ghcr.io/recmo/rust-static-build:1.58-aarch64-arm64
+docker manifest push ghcr.io/recmo/rust-static-build:1.58-aarch64
+```
+```
+docker manifest create \
+    ghcr.io/recmo/rust-static-build:1.58-x86_64 \
+    --amend ghcr.io/recmo/rust-static-build:1.58-x86_64-amd64 \
+    --amend ghcr.io/recmo/rust-static-build:1.58-x86_64-arm64
+docker manifest push ghcr.io/recmo/rust-static-build:1.58-x86_64
+```

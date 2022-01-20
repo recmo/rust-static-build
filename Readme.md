@@ -18,35 +18,52 @@ It is similar to `https://github.com/emk/rust-musl-builder` and `https://github.
 
 ## Using
 
-```
-docker run --rm -v "$(pwd)":/src ghcr.io/recmo/rust-static-build:1.58-x86_64 cargo build --release
-docker run --rm -v "$(pwd)":/src ghcr.io/recmo/rust-static-build:1.58-aarch64 cargo build --release
-```
-
-## Build locally
-
+To build staticaly linked executables for both x86_64 and aarch64 linux:
 
 ```
-docker build --build-arg TARGET=aarch64 --tag ghcr.io/recmo/rust-static-build:1.58-aarch64 .
-docker build --build-arg TARGET=x86_64 --tag ghcr.io/recmo/rust-static-build:1.58-x86_64 .
-```
-
-
-## Developer notes
-
-Update manifest
-
-```
-docker manifest create \
-    ghcr.io/recmo/rust-static-build:1.58-aarch64 \
-    --amend ghcr.io/recmo/rust-static-build:1.58-aarch64-amd64 \
-    --amend ghcr.io/recmo/rust-static-build:1.58-aarch64-arm64
-docker manifest push ghcr.io/recmo/rust-static-build:1.58-aarch64
-```
-```
-docker manifest create \
+docker run --rm \
+    -v "$(pwd)":/src \
     ghcr.io/recmo/rust-static-build:1.58-x86_64 \
-    --amend ghcr.io/recmo/rust-static-build:1.58-x86_64-amd64 \
-    --amend ghcr.io/recmo/rust-static-build:1.58-x86_64-arm64
-docker manifest push ghcr.io/recmo/rust-static-build:1.58-x86_64
+    cargo build --release
+docker run --rm \
+    -v "$(pwd)":/src \
+    ghcr.io/recmo/rust-static-build:1.58-aarch64 \
+    cargo build --release
+```
+
+## Maintainer build instructions
+
+Build locally
+
+```
+for host in amd64 arm64; do
+    for target in x86_64 aarch64; do
+        docker build --platform linux/$host --build-arg TARGET=$target --tag ghcr.io/recmo/rust-static-build:1.58-$target-$host .
+        docker push ghcr.io/recmo/rust-static-build:1.58-$target-$host
+    done
+done
+```
+
+Create manifests
+
+```
+for target in x86_64 aarch64; do
+    docker manifest rm ghcr.io/recmo/rust-static-build:1.58-$target
+    docker manifest create \
+        ghcr.io/recmo/rust-static-build:1.58-$target \
+        ghcr.io/recmo/rust-static-build:1.58-$target-amd64 \
+        ghcr.io/recmo/rust-static-build:1.58-$target-arm64
+    docker manifest inspect ghcr.io/recmo/rust-static-build:1.58-$target
+    docker manifest push ghcr.io/recmo/rust-static-build:1.58-$target
+done
+```
+
+Test manifests
+
+```
+for host in amd64 arm64; do
+    for target in x86_64 aarch64; do
+        docker run --pull always --platform linux/$host --rm -it ghcr.io/recmo/rust-static-build:1.58-$target cargo --version
+    done
+done
 ```

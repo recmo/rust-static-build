@@ -54,10 +54,10 @@ jobs:
         with:
           platforms: linux/${{ matrix.host }}
           build-args: TARGET=${{ matrix.target }}
-          tags: ghcr.io/${{ github.repository }}:${{ env.RUST_VERSION }}-${{ matrix.target }}
+          tags: ghcr.io/${{ github.repository }}:${{ env.RUST_VERSION }}-${{ matrix.target }}-$${ matrix.host }}
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Test image
         run:
-          docker run --pull always --platform linux/${{ matrix.host }} --rm ghcr.io/${{ github.repository }}:${{ env.RUST_VERSION }}-${{ matrix.target }} rustc --version
+          docker run --pull always --platform linux/${{ matrix.host }} --rm ghcr.io/${{ github.repository }}:${{ env.RUST_VERSION }}-${{ matrix.target }}-${{ matrix.host }} rustc --version

@@ -51,7 +51,7 @@ for target in x86_64 aarch64; do
     docker manifest rm ghcr.io/recmo/rust-static-build:1.61-$target
     docker manifest create \
         ghcr.io/recmo/rust-static-build:1.61-$target \
-        ghcr.io/recmo/rust-static-build:1.6-$target-amd64 \
+        ghcr.io/recmo/rust-static-build:1.61-$target-amd64 \
         ghcr.io/recmo/rust-static-build:1.61-$target-arm64
     docker manifest inspect ghcr.io/recmo/rust-static-build:1.61-$target
     docker manifest push ghcr.io/recmo/rust-static-build:1.61-$target

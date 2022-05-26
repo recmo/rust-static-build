@@ -23,7 +23,7 @@ RUN curl -fL "http://zlib.net/zlib-$ZLIB_VERSION.tar.gz" | tar xz && cd "zlib-$Z
     rm -r "/src/zlib-$ZLIB_VERSION"
 
 # Build OpenSSL
-ARG OPENSSL_VERSION=1.1.1n
+ARG OPENSSL_VERSION=1.1.1o
 RUN curl -fL "https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz" | tar xz &&\
     cd "openssl-$OPENSSL_VERSION" &&\
     export CC=/usr/local/musl/bin/$TARGET-linux-musl-gcc &&\
@@ -36,7 +36,7 @@ ENV AARCH64_UNKNOWN_LINUX_MUSL_OPENSSL_DIR=/usr/local/musl
 ENV AARCH64_UNKNOWN_LINUX_MUSL_OPENSSL_STATIC=1
 
 # Build libpq from postgresql
-ARG POSTGRESql_VERSION=14.2
+ARG POSTGRESql_VERSION=14.3
 RUN curl -fL "https://ftp.postgresql.org/pub/source/v$POSTGRESql_VERSION/postgresql-$POSTGRESql_VERSION.tar.gz" | tar xz &&\
     cd "postgresql-$POSTGRESql_VERSION" &&\
     ./configure --host=$(uname -m)-linux --prefix=/usr/local/musl \

@@ -4,7 +4,7 @@ on:
   push
 
 env:
-  RUST_VERSION: "1.61"
+  RUST_VERSION: "1.62"
 
 jobs:
   accept:

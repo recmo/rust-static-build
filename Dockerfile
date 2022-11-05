@@ -16,14 +16,14 @@ ENV CC_x86_64_unknown_linux_musl=/usr/local/musl/bin/x86_64-linux-musl-gcc
 ENV CC_aarch64_unknown_linux_musl=/usr/local/musl/bin/aarch64-linux-musl-gcc
 
 # Build zlib
-ARG ZLIB_VERSION=1.2.12
+ARG ZLIB_VERSION=1.2.13
 RUN curl -fL "http://zlib.net/zlib-$ZLIB_VERSION.tar.gz" | tar xz && cd "zlib-$ZLIB_VERSION" &&\
     export CC=/usr/local/musl/bin/$TARGET-linux-musl-gcc &&\
     ./configure --static --prefix=/usr/local/musl && make && make install &&\
     rm -r "/src/zlib-$ZLIB_VERSION"
 
 # Build OpenSSL
-ARG OPENSSL_VERSION=1.1.1o
+ARG OPENSSL_VERSION=1.1.1s
 RUN curl -fL "https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz" | tar xz &&\
     cd "openssl-$OPENSSL_VERSION" &&\
     export CC=/usr/local/musl/bin/$TARGET-linux-musl-gcc &&\
@@ -36,7 +36,7 @@ ENV AARCH64_UNKNOWN_LINUX_MUSL_OPENSSL_DIR=/usr/local/musl
 ENV AARCH64_UNKNOWN_LINUX_MUSL_OPENSSL_STATIC=1
 
 # Build libpq from postgresql
-ARG POSTGRESql_VERSION=14.3
+ARG POSTGRESql_VERSION=15.0
 RUN curl -fL "https://ftp.postgresql.org/pub/source/v$POSTGRESql_VERSION/postgresql-$POSTGRESql_VERSION.tar.gz" | tar xz &&\
     cd "postgresql-$POSTGRESql_VERSION" &&\
     ./configure --host=$(uname -m)-linux --prefix=/usr/local/musl \

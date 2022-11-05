@@ -23,11 +23,11 @@ To build statically linked executables for both x86_64 and aarch64 linux:
 ```
 docker run --rm \
     -v "$(pwd)":/src \
-    ghcr.io/recmo/rust-static-build:1.64-x86_64 \
+    ghcr.io/recmo/rust-static-build:1.65-x86_64 \
     cargo build --release
 docker run --rm \
     -v "$(pwd)":/src \
-    ghcr.io/recmo/rust-static-build:1.64-aarch64 \
+    ghcr.io/recmo/rust-static-build:1.65-aarch64 \
     cargo build --release
 ```
 
@@ -38,8 +38,8 @@ Build locally
 ```
 for host in amd64 arm64; do
     for target in x86_64 aarch64; do
-        docker build --platform linux/$host --build-arg TARGET=$target --tag ghcr.io/recmo/rust-static-build:1.64-$target-$host .
-        docker push ghcr.io/recmo/rust-static-build:1.64-$target-$host
+        docker build --platform linux/$host --build-arg TARGET=$target --tag ghcr.io/recmo/rust-static-build:1.65-$target-$host .
+        docker push ghcr.io/recmo/rust-static-build:1.65-$target-$host
     done
 done
 ```
@@ -48,13 +48,13 @@ Create manifests
 
 ```
 for target in x86_64 aarch64; do
-    docker manifest rm ghcr.io/recmo/rust-static-build:1.64-$target
+    docker manifest rm ghcr.io/recmo/rust-static-build:1.65-$target
     docker manifest create \
-        ghcr.io/recmo/rust-static-build:1.64-$target \
-        ghcr.io/recmo/rust-static-build:1.64-$target-amd64 \
-        ghcr.io/recmo/rust-static-build:1.64-$target-arm64
-    docker manifest inspect ghcr.io/recmo/rust-static-build:1.64-$target
-    docker manifest push ghcr.io/recmo/rust-static-build:1.64-$target
+        ghcr.io/recmo/rust-static-build:1.65-$target \
+        ghcr.io/recmo/rust-static-build:1.65-$target-amd64 \
+        ghcr.io/recmo/rust-static-build:1.65-$target-arm64
+    docker manifest inspect ghcr.io/recmo/rust-static-build:1.65-$target
+    docker manifest push ghcr.io/recmo/rust-static-build:1.65-$target
 done
 ```
 
@@ -63,7 +63,7 @@ Test manifests
 ```
 for host in amd64 arm64; do
     for target in x86_64 aarch64; do
-        docker run --pull always --platform linux/$host --rm -it ghcr.io/recmo/rust-static-build:1.64-$target cargo --version
+        docker run --pull always --platform linux/$host --rm -it ghcr.io/recmo/rust-static-build:1.65-$target cargo --version
     done
 done
 ```

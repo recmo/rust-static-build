@@ -1,4 +1,4 @@
-FROM rust:1.64
+FROM rust:1.65
 WORKDIR /src
 
 # Target architecture, one of x864_64 or aarch64

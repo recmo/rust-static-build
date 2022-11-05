@@ -1,7 +1,7 @@
 FROM rust:1.65
 WORKDIR /src
 
-# Target architecture, one of x864_64 or aarch64
+# Target architecture, one of x86_64 or aarch64
 ARG TARGET
 LABEL org.opencontainers.image.description Rust builder for static $TARGET-linux-musl executables.
 

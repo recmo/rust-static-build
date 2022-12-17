@@ -1,9 +1,14 @@
-FROM rust:1.65
+FROM rust:1.66
 WORKDIR /src
 
 # Target architecture, one of x86_64 or aarch64
 ARG TARGET
 LABEL org.opencontainers.image.description Rust builder for static $TARGET-linux-musl executables.
+
+# Install more build tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    protobuf-compiler \
+    && rm -rf /var/lib/apt/lists/*
 
 # Build {x86_64,aarch64}-linux-musl toolchain
 # This is required to build zlib, openssl and other C dependencies
